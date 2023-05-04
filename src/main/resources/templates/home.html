@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1>HELLO BITLAB</h1>
+  <br>
+  <a sec:authorize="isAnonymous()" th:href="@{'/signin'}">SIGN IN PAGE</a>
+  <div sec:authorize="isAuthenticated()">
+    <a th:href="@{'/profile'}">GO TO PROFILE</a>
+  </div>
+</body>
+</html>
