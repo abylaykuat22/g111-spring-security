@@ -1,7 +1,7 @@
 package bitlab.g111.springsecurity.config;
 
 import bitlab.g111.springsecurity.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import bitlab.g111.springsecurity.services.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,8 +16,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-  @Autowired
-  private UserService userService;
+
+  @Bean
+  public UserService userService() {
+    return new UserServiceImpl();
+  }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -25,10 +28,13 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     AuthenticationManagerBuilder authenticationManagerBuilder =
         http.getSharedObject(AuthenticationManagerBuilder.class);
-    authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
+    authenticationManagerBuilder.userDetailsService(userService())
+        .passwordEncoder(passwordEncoder());
+
+    http.exceptionHandling().accessDeniedPage("/forbidden");
 
     http.formLogin()
         .loginPage("/signin") // страница авторизации
