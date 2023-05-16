@@ -48,6 +48,8 @@ public class SecurityConfig {
         .logoutUrl("/exit") // для выхода из аккаунта
         .logoutSuccessUrl("/signin"); // после выхода
 
+    http.csrf().disable();
+
     return http.build();
   }
 }
