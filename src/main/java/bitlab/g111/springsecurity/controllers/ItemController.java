@@ -1,7 +1,10 @@
 package bitlab.g111.springsecurity.controllers;
 
-import bitlab.g111.springsecurity.models.Item;
+import bitlab.g111.springsecurity.dtos.ItemCreate;
+import bitlab.g111.springsecurity.dtos.ItemUpdate;
+import bitlab.g111.springsecurity.dtos.ItemView;
 import bitlab.g111.springsecurity.repositories.ItemRepository;
+import bitlab.g111.springsecurity.services.ItemService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,24 +23,27 @@ public class ItemController {
   @Autowired
   private ItemRepository itemRepository;
 
+  @Autowired
+  private ItemService itemService;
+
   @GetMapping
-  public List<Item> getItems() {
-    return itemRepository.findAll();
+  public List<ItemView> getItems() {
+    return itemService.getItems();
   }
 
   @GetMapping("{id}")
-  public Item getItem(@PathVariable Long id) {
-    return itemRepository.findById(id).orElseThrow();
+  public ItemView getItem(@PathVariable Long id) {
+    return itemService.getItem(id);
   }
 
   @PostMapping
-  public Item addItem(@RequestBody Item item) {
-    return itemRepository.save(item);
+  public ItemView addItem(@RequestBody ItemCreate itemCreate) {
+    return itemService.addItem(itemCreate);
   }
 
   @PutMapping
-  public Item updateItem(@RequestBody Item item) {
-    return itemRepository.save(item);
+  public ItemView updateItem(@RequestBody ItemUpdate itemUpdate) {
+    return itemService.updateItem(itemUpdate);
   }
 
   @DeleteMapping("{id}")
